@@ -3,6 +3,8 @@ package co.com.practicatdd.negocio;
 import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.enumerator.Genero;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
+import co.com.practicatdd.repositorio.ClienteRepositorio;
+import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
@@ -10,14 +12,17 @@ import org.joda.time.PeriodType;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by santi on 25/04/2017.
- */
 public class ClienteNegocio {
     private Cliente cliente;
+    private ClienteRepositorio repositorio;
 
     public ClienteNegocio(Cliente informacionCliente) {
-        cliente = informacionCliente;
+        this.cliente = informacionCliente;
+    }
+
+    public ClienteNegocio(Cliente informacionCliente, ClienteRepositorio repositorio) {
+        this.cliente = informacionCliente;
+        this.repositorio = repositorio;
     }
 
     public boolean ValidarCampos() {
@@ -39,14 +44,27 @@ public class ClienteNegocio {
     }
 
     public boolean ValidarCamposRequeridos() {
-        return !(cliente.getNombres() == null || "".equals(cliente.getNombres()))
-                && !(cliente.getApellidos() == null || "".equals(cliente.getApellidos()))
-                && !(cliente.getApellidos() == null || "".equals(cliente.getApellidos()))
+        return  (!(stringIsNotNullOrEmpty(cliente.getNombres()))
+                && !(stringIsNotNullOrEmpty(cliente.getApellidos()))
+                && !(stringIsNotNullOrEmpty(cliente.getApellidos()))
                 && cliente.getTipoDocumento() != TipoDocumento.NINGUNO
-                && !(cliente.getNumeroDocumento() == null || "".equals(cliente.getNumeroDocumento()))
-                && !(cliente.getTelefonoCelular() == null || "".equals(cliente.getTelefonoCelular()))
-                && !(cliente.getCorreoElectronico() == null || "".equals(cliente.getCorreoElectronico()))
-                && cliente.getGenero() != Genero.NINGUNO;
+                && !(stringIsNotNullOrEmpty(cliente.getNumeroDocumento()))
+                && !(stringIsNotNullOrEmpty(cliente.getTelefonoCelular()))
+                && !(stringIsNotNullOrEmpty(cliente.getCorreoElectronico()))
+                && cliente.getGenero() != Genero.NINGUNO);
+    }
+
+    private boolean stringIsNotNullOrEmpty(String field) {
+        return field == null || "".equals(field);
+    }
+
+    public String imprimirMensajeCamposRequeridos() {
+        String mensaje = "";
+        if (!ValidarCamposRequeridos()) {
+            mensaje = "El campo es requerido";
+            System.out.println(mensaje);
+        }
+        return mensaje;
     }
 
     public boolean ValidarTelefonoEmpresa() {
@@ -82,9 +100,21 @@ public class ClienteNegocio {
         if (cliente.getFechaNacimiento() != null) {
             System.out.println(EdadCliente());
         }
-        if (!ValidarCampos()) {
-            return false;
+        if (ValidarCampos()) {
+            if ("La información ha sido guardada con éxito".equals(GuardarCliente())) {
+                return true;
+            }
         }
-        return true;
+        return false;
+    }
+
+    public String GuardarCliente() {
+        if (repositorio.validarUsuarioExistente(cliente.getNumeroDocumento())) {
+            return "El cliente ya existe";
+        }
+        if (repositorio.saveCliente(cliente) != null) {
+            return "La información ha sido guardada con éxito";
+        }
+        return  "Ocurrió un error al guardar la información.";
     }
 }

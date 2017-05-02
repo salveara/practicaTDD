@@ -3,16 +3,21 @@ package co.com.practicatdd.negocio;
 import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.enumerator.Genero;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
+
+import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by santi on 25/04/2017.
- */
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class ClienteTest {
 
     @Test
@@ -143,9 +148,23 @@ public class ClienteTest {
         Assert.assertEquals("Edad: 0", respuesta);
     }
 
-//    Si el usuario ya existe se debe mostrar un mensaje “El cliente ya existe”, de lo contrario se debe
-//    permitir guardar la información y mostrar el mensaje “La información ha sido guardada con éxito”
+    @Test
+    public void NoSePuedeGuardarClienteSiYaExiste() {
+        //Arange
 
+        Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
+                TipoDocumento.CEDULA, "999999999", "310000000",
+                "albertochanci@gmail.com", Genero.HOMBRE);
+        ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
+        when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(true);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
+
+        //Act
+        String respuesta = negocio.GuardarCliente();
+
+        //Assert
+        Assert.assertEquals("El cliente ya existe", respuesta);
+    }
 
     @Test
     public void CuandoLaInformacionNoEsValidaNoSePuedeGuardar() {
@@ -162,6 +181,21 @@ public class ClienteTest {
         Assert.assertFalse(resultado);
     }
 
-//    Si ocurre un error al guardar la información del cliente se debe guardar registro del error y se debe
-//    mostrar el mensaje “Ocurrió un error al guardar la información.”
+    @Test
+    public void SiOcurreUnErrorGuardandoClienteSeDebeMostrarMensaje() {
+        //Arrange
+        Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
+                TipoDocumento.CEDULA, "999999999", "310000000",
+                "albertochanci@gmail.com", Genero.HOMBRE);
+        ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
+        when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(false);
+        when(clienteRepositorio.saveCliente(cliente)).thenReturn(null);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
+
+        //Act
+        String respuesta = negocio.GuardarCliente();
+
+        //Assert
+        Assert.assertEquals("Ocurrió un error al guardar la información.", respuesta);
+    }
 }

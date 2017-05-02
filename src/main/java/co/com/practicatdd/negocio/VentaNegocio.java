@@ -1,10 +1,12 @@
 package co.com.practicatdd.negocio;
 
+import co.com.practicatdd.entidades.Producto;
 import co.com.practicatdd.entidades.Venta;
+import co.com.practicatdd.entidades.VentaProducto;
 
-/**
- * Created by santi on 25/04/2017.
- */
+import java.util.Date;
+import java.util.List;
+
 public class VentaNegocio {
 
     private Venta venta;
@@ -14,25 +16,71 @@ public class VentaNegocio {
     }
 
     public boolean validarCamposRequeridos() {
-        return !(venta.getCliente() == null)
-                && !(venta.getNombreProducto() == null || "".equals(venta.getNombreProducto()))
-                && !(venta.getCantidad() == null)
-                && !(venta.getPrecio() == null)
-                && !(venta.getTotalVentaProducto() == null)
-                && !(venta.getSubtotal() == null)
-                && !(venta.getIva() == null)
-                && !(venta.getTotalVenta() == null)
-                && !(venta.getFechaVenta() == null);
+        return (validarCamposRequeridosVentaProducto(venta.getVentaProductos()))
+                && (venta.getCliente() != null)
+                && (venta.getSubtotal() != null)
+                && (venta.getIva() != null)
+                && (venta.getTotalVenta() != null)
+                && (venta.getFechaVenta() != null);
     }
 
-    public boolean validarCantidad() {
-        return (venta.getCantidad() > 0);
+    private boolean validarCamposRequeridosVentaProducto(List<VentaProducto> ventaProductos) {
+        for (VentaProducto ventaProducto: ventaProductos) {
+            boolean campofaltante = validarCamposRequeridosProducto(ventaProducto.getProducto())
+                    && (ventaProducto.getCantidad() != null)
+                    && (ventaProducto.getTotalVenta() != null);
+            if (!campofaltante) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public boolean validarTotales() {
-        return (venta.getTotalVentaProducto() > 0
-            && venta.getTotalVenta() > 0
-            && venta.getSubtotal() > 0);
+    public boolean validarCamposRequeridosProducto(Producto producto) {
+        return (stringIsNotNullOrEmpty(producto.getNombre())
+                && (producto.getPrecio() != null));
+    }
+
+    private boolean stringIsNotNullOrEmpty(String field) {
+        return field != null && !"".equals(field);
+    }
+
+    public boolean validarCantidad(List<VentaProducto> ventaProductos) {
+        for (VentaProducto ventaProducto: ventaProductos) {
+            boolean cantidadMayorCero = ventaProducto.getCantidad() > 0;
+            if (!cantidadMayorCero) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean validarTotalesVenta() {
+        return (venta.getTotalVenta() > 0
+                && venta.getSubtotal() > 0
+                && validarTotalesVentaProducto(venta.getVentaProductos()));
+    }
+
+    public boolean validarTotalesVentaProducto(List<VentaProducto> ventaProductos) {
+        for (VentaProducto ventaProducto: ventaProductos) {
+            boolean totalMayorCero = ventaProducto.getTotalVenta() > 0;
+            if (!totalMayorCero) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public double calcularSubtotal() {
+        double subtotal = 0;
+        for (VentaProducto ventaProducto: venta.getVentaProductos()) {
+            subtotal += ventaProducto.getTotalVenta();
+        }
+        return subtotal;
+    }
+
+    public double calcularTotalVenta() {
+        return venta.getSubtotal() * (1 - venta.getDescuento()) * (1 + venta.getIva());
     }
 
     public boolean validarTotalVentaMayorSubtotal() {
@@ -40,10 +88,10 @@ public class VentaNegocio {
     }
 
     public boolean validarDescuento() {
-        return venta.getDescuento() >= 0;
+        return venta.getDescuento() >= 0 && venta.getDescuento() <= 1;
     }
 
-    public boolean validarSubtotalIgualTotalProducto() {
-            return venta.getSubtotal().equals(venta.getTotalVentaProducto());
+    public Date fechaActual() {
+        return null;
     }
 }

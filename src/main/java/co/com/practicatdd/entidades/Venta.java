@@ -1,17 +1,11 @@
 package co.com.practicatdd.entidades;
 
 import java.util.Date;
+import java.util.List;
 
-/**
- * Created by santi on 25/04/2017.
- */
 public class Venta {
-
     private Cliente cliente;
-    private String nombreProducto;
-    private Integer cantidad;
-    private Double precio;
-    private Double totalVentaProducto;
+    private List<VentaProducto> ventaProductos;
     private Double subtotal;
     private Double iva;
     private Double totalVenta;
@@ -21,16 +15,23 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(Cliente cliente, String nombreProducto, int cantidad, double precio, double totalVentaProducto, double subtotal, double iva, double totalVenta, Date date) {
+    public Venta(Cliente cliente, List<VentaProducto> ventaProductos, Double subtotal, Double iva, Double totalVenta, Date fechaVenta) {
         this.cliente = cliente;
-        this.nombreProducto = nombreProducto;
-        this.cantidad = cantidad;
-        this.precio = precio;
-        this.totalVentaProducto = totalVentaProducto;
+        this.ventaProductos = ventaProductos;
         this.subtotal = subtotal;
         this.iva = iva;
         this.totalVenta = totalVenta;
-        this.fechaVenta = date;
+        this.fechaVenta = fechaVenta;
+    }
+
+    public Venta(Cliente cliente, List<VentaProducto> ventaProducto, Double subtotal, Double iva, Double totalVenta, Date fechaVenta, Double descuento) {
+        this.cliente = cliente;
+        this.ventaProductos = ventaProducto;
+        this.subtotal = subtotal;
+        this.iva = iva;
+        this.totalVenta = totalVenta;
+        this.fechaVenta = fechaVenta;
+        this.descuento = descuento;
     }
 
     public Cliente getCliente() {
@@ -41,36 +42,12 @@ public class Venta {
         this.cliente = cliente;
     }
 
-    public String getNombreProducto() {
-        return nombreProducto;
+    public List<VentaProducto> getVentaProductos() {
+        return ventaProductos;
     }
 
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
-    }
-
-    public Integer getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public Double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(Double precio) {
-        this.precio = precio;
-    }
-
-    public Double getTotalVentaProducto() {
-        return totalVentaProducto;
-    }
-
-    public void setTotalVentaProducto(Double totalVentaProducto) {
-        this.totalVentaProducto = totalVentaProducto;
+    public void setVentaProductos(List<VentaProducto> ventaProductos) {
+        this.ventaProductos = ventaProductos;
     }
 
     public Double getSubtotal() {
