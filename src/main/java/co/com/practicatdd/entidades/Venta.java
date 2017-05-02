@@ -7,31 +7,34 @@ public class Venta {
     private Cliente cliente;
     private List<VentaProducto> ventaProductos;
     private Double subtotal;
-    private Double iva;
+    private Double iva = 0.19;
     private Double totalVenta;
     private Date fechaVenta;
     private Double descuento;
 
-    public Venta() {
-    }
-
-    public Venta(Cliente cliente, List<VentaProducto> ventaProductos, Double subtotal, Double iva, Double totalVenta, Date fechaVenta) {
+    public Venta(Cliente cliente, List<VentaProducto> ventaProductos) {
         this.cliente = cliente;
         this.ventaProductos = ventaProductos;
-        this.subtotal = subtotal;
-        this.iva = iva;
-        this.totalVenta = totalVenta;
-        this.fechaVenta = fechaVenta;
+        this.subtotal = calcularSubtotal();
+        this.totalVenta = subtotal * (1 + iva);
+        this.fechaVenta = new Date();
     }
 
-    public Venta(Cliente cliente, List<VentaProducto> ventaProducto, Double subtotal, Double iva, Double totalVenta, Date fechaVenta, Double descuento) {
+    public Venta(Cliente cliente, List<VentaProducto> ventaProductos, Double descuento) {
         this.cliente = cliente;
-        this.ventaProductos = ventaProducto;
-        this.subtotal = subtotal;
-        this.iva = iva;
-        this.totalVenta = totalVenta;
-        this.fechaVenta = fechaVenta;
+        this.ventaProductos = ventaProductos;
+        this.subtotal = calcularSubtotal();
         this.descuento = descuento;
+        this.totalVenta = subtotal * (1 - descuento) * (1 + iva);
+        this.fechaVenta = new Date();
+    }
+
+    public double calcularSubtotal() {
+        double subtotal = 0;
+        for (VentaProducto ventaProducto: ventaProductos) {
+            subtotal += ventaProducto.getTotalVenta();
+        }
+        return subtotal;
     }
 
     public Cliente getCliente() {
@@ -54,32 +57,16 @@ public class Venta {
         return subtotal;
     }
 
-    public void setSubtotal(Double subtotal) {
-        this.subtotal = subtotal;
-    }
-
     public Double getIva() {
         return iva;
-    }
-
-    public void setIva(Double iva) {
-        this.iva = iva;
     }
 
     public Double getTotalVenta() {
         return totalVenta;
     }
 
-    public void setTotalVenta(Double totalVenta) {
-        this.totalVenta = totalVenta;
-    }
-
     public Date getFechaVenta() {
         return fechaVenta;
-    }
-
-    public void setFechaVenta(Date fechaVenta) {
-        this.fechaVenta = fechaVenta;
     }
 
     public Double getDescuento() {

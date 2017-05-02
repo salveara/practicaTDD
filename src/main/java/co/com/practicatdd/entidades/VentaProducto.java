@@ -5,10 +5,10 @@ public class VentaProducto {
     private Integer cantidad;
     private Double totalVenta;
 
-    public VentaProducto(Producto producto, Integer cantidad, Double totalVenta) {
+    public VentaProducto(Producto producto, Integer cantidad) {
         this.producto = producto;
         this.cantidad = cantidad;
-        this.totalVenta = totalVenta;
+        this.totalVenta = producto.getPrecio() * cantidad;
     }
 
     public Producto getProducto() {
@@ -29,9 +29,5 @@ public class VentaProducto {
 
     public Double getTotalVenta() {
         return totalVenta;
-    }
-
-    public void setTotalVenta(Double totalVenta) {
-        this.totalVenta = totalVenta;
     }
 }

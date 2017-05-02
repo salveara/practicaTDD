@@ -71,18 +71,6 @@ public class VentaNegocio {
         return true;
     }
 
-    public double calcularSubtotal() {
-        double subtotal = 0;
-        for (VentaProducto ventaProducto: venta.getVentaProductos()) {
-            subtotal += ventaProducto.getTotalVenta();
-        }
-        return subtotal;
-    }
-
-    public double calcularTotalVenta() {
-        return venta.getSubtotal() * (1 - venta.getDescuento()) * (1 + venta.getIva());
-    }
-
     public boolean validarTotalVentaMayorSubtotal() {
         return venta.getTotalVenta() > venta.getSubtotal();
     }
