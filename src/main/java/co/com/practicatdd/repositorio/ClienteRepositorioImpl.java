@@ -8,7 +8,7 @@ public class ClienteRepositorioImpl implements ClienteRepositorio {
         return true;
     }
 
-    public Cliente saveCliente(Cliente cliente) {
+    public Cliente guardarCliente(Cliente cliente) {
         return cliente;
     }
 }

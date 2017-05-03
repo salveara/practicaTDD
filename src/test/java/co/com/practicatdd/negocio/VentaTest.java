@@ -6,12 +6,16 @@ import co.com.practicatdd.entidades.Venta;
 import co.com.practicatdd.entidades.VentaProducto;
 import co.com.practicatdd.entidades.enumerator.Genero;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
+import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class VentaTest {
 
@@ -198,5 +202,40 @@ public class VentaTest {
 
         //Assert
         Assert.assertEquals(0.19, respuesta, 0.0);
+    }
+
+    //TODO las dos
+    @Test
+    public void clienteNuevoQueNoDaSuInformacionSeGuardaComoGenerico() {
+        Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
+                TipoDocumento.CEDULA, "999999999", "310000000",
+                "albertochanci@gmail.com", Genero.HOMBRE);
+        ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
+        when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(false);
+        when(clienteRepositorio.guardarCliente(cliente)).thenReturn(null);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
+
+        //Act
+        String respuesta = negocio.GuardarCliente();
+
+        //Assert
+        Assert.assertEquals("Cliente almacenado como cliente generico", respuesta);
+    }
+
+    @Test
+    public void clienteExisteSeGuardaConEseCliente() {
+        Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
+                TipoDocumento.CEDULA, "999999999", "310000000",
+                "albertochanci@gmail.com", Genero.HOMBRE);
+        ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
+        when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(true);
+        when(clienteRepositorio.guardarCliente(cliente)).thenReturn(cliente);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
+
+        //Act
+        String respuesta = negocio.GuardarCliente();
+
+        //Assert
+        Assert.assertEquals("Cliente almacenado como cliente generico", respuesta);
     }
 }

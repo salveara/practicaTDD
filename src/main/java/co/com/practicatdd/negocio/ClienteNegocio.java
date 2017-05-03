@@ -112,7 +112,7 @@ public class ClienteNegocio {
         if (repositorio.validarUsuarioExistente(cliente.getNumeroDocumento())) {
             return "El cliente ya existe";
         }
-        if (repositorio.saveCliente(cliente) != null) {
+        if (repositorio.guardarCliente(cliente) != null) {
             return "La información ha sido guardada con éxito";
         }
         return  "Ocurrió un error al guardar la información.";

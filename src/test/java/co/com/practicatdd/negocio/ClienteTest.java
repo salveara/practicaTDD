@@ -189,7 +189,7 @@ public class ClienteTest {
                 "albertochanci@gmail.com", Genero.HOMBRE);
         ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
         when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(false);
-        when(clienteRepositorio.saveCliente(cliente)).thenReturn(null);
+        when(clienteRepositorio.guardarCliente(cliente)).thenReturn(null);
         ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
 
         //Act

@@ -5,5 +5,5 @@ import co.com.practicatdd.entidades.Cliente;
 public interface ClienteRepositorio {
     boolean validarUsuarioExistente(String numeroDocumento);
 
-    Cliente saveCliente(Cliente cliente);
+    Cliente guardarCliente(Cliente cliente);
 }

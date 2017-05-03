@@ -3,8 +3,8 @@ package co.com.practicatdd.negocio;
 import co.com.practicatdd.entidades.Producto;
 import co.com.practicatdd.entidades.Venta;
 import co.com.practicatdd.entidades.VentaProducto;
+import co.com.practicatdd.repositorio.VentaRepositorio;
 
-import java.util.Date;
 import java.util.List;
 
 public class VentaNegocio {
@@ -79,7 +79,4 @@ public class VentaNegocio {
         return venta.getDescuento() >= 0 && venta.getDescuento() <= 1;
     }
 
-    public Date fechaActual() {
-        return null;
-    }
 }
