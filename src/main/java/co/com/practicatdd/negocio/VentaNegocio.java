@@ -97,6 +97,7 @@ public class VentaNegocio {
         if (deseaDarInformacion){
             if (validarTodosLosCampos()) {
                 clienteNegocio.GuardarCliente();
+                //Venta repo
                 return venta;
             }
             return null;
@@ -104,6 +105,7 @@ public class VentaNegocio {
         Cliente clienteGenerico = new Cliente();
         clienteGenerico.setNombres("Cliente Generico");
         venta.setCliente(clienteGenerico);
+        //venta repo
         return venta;
     }
 }

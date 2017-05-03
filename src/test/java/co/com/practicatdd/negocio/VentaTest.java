@@ -204,7 +204,6 @@ public class VentaTest {
         Assert.assertEquals(0.19, respuesta, 0.0);
     }
 
-    //TODO las dos
     @Test
     public void clienteNuevoQueNoDaSuInformacionSeGuardaComoGenerico() {
         //Arrange
