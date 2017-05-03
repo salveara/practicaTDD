@@ -4,8 +4,7 @@ import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.Producto;
 import co.com.practicatdd.entidades.Venta;
 import co.com.practicatdd.entidades.VentaProducto;
-
-import java.util.List;
+import co.com.practicatdd.repositorio.VentaRepositorioImp;
 
 public class VentaNegocio {
 
@@ -94,10 +93,11 @@ public class VentaNegocio {
     }
 
     public Venta GuardarVenta(boolean deseaDarInformacion) {
+        VentaRepositorioImp ventaRepositorioImp = new VentaRepositorioImp();
         if (deseaDarInformacion){
             if (validarTodosLosCampos()) {
                 clienteNegocio.GuardarCliente();
-                //Venta repo
+                ventaRepositorioImp.guardarVenta(venta);
                 return venta;
             }
             return null;
@@ -105,7 +105,7 @@ public class VentaNegocio {
         Cliente clienteGenerico = new Cliente();
         clienteGenerico.setNombres("Cliente Generico");
         venta.setCliente(clienteGenerico);
-        //venta repo
+        ventaRepositorioImp.guardarVenta(venta);
         return venta;
     }
 }

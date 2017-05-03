@@ -1,6 +1,7 @@
 package co.com.practicatdd.entidades;
 
 import co.com.practicatdd.entidades.enumerator.Genero;
+import co.com.practicatdd.entidades.enumerator.TipoCliente;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
 
 import java.util.Date;
@@ -19,11 +20,13 @@ public class Cliente {
 
     private String telefonoEmpresa;
 
+    private TipoCliente tipoCliente;
+
     public Cliente() {
     }
 
     public Cliente(String nombres, String apellidos, TipoDocumento tipoDocumento, String numeroDocumento,
-                   String telefonoCelular, String correoElectronico, Genero genero) {
+                   String telefonoCelular, String correoElectronico, Genero genero, TipoCliente tipoCliente) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.tipoDocumento = tipoDocumento;
@@ -31,6 +34,7 @@ public class Cliente {
         this.telefonoCelular = telefonoCelular;
         this.correoElectronico = correoElectronico;
         this.genero = genero;
+        this.tipoCliente = tipoCliente;
     }
 
     public String getNombres() {
@@ -113,4 +117,11 @@ public class Cliente {
         this.telefonoEmpresa = telefonoEmpresa;
     }
 
+    public TipoCliente getTipoCliente() {
+        return tipoCliente;
+    }
+
+    public void setTipoCliente(TipoCliente tipoCliente) {
+        this.tipoCliente = tipoCliente;
+    }
 }

@@ -1,5 +1,7 @@
 package co.com.practicatdd.entidades;
 
+import co.com.practicatdd.entidades.enumerator.TipoCliente;
+
 import java.util.Date;
 import java.util.List;
 
@@ -18,14 +20,19 @@ public class Venta {
         this.subtotal = calcularSubtotal();
         this.totalVenta = subtotal * (1 + iva);
         this.fechaVenta = new Date();
-        this.descuento = 0.0;
+        this.descuento = calcularDescuento();
     }
 
     public Venta(Cliente cliente, List<VentaProducto> ventaProductos, Double descuento) {
         this.cliente = cliente;
         this.ventaProductos = ventaProductos;
         this.subtotal = calcularSubtotal();
-        this.descuento = descuento;
+        if ("DEFECTO".equals(cliente.getTipoCliente().toString())
+                && descuento < ((TipoCliente.DEFECTO.getDescuento() == 0.5)?0.5:0.2)) {
+            this.descuento = descuento;
+        } else {
+            this.descuento = calcularDescuento();
+        }
         this.totalVenta = subtotal * (1 - descuento) * (1 + iva);
         this.fechaVenta = new Date();
     }
@@ -36,6 +43,14 @@ public class Venta {
             subtotal += ventaProducto.getTotalVenta();
         }
         return subtotal;
+    }
+
+    public double calcularDescuento() {
+        switch (cliente.getTipoCliente()) {
+            case ORO: return TipoCliente.ORO.getDescuento();
+            case PLATA: return TipoCliente.PLATA.getDescuento();
+            default: return TipoCliente.DEFECTO.getDescuento();
+        }
     }
 
     public Cliente getCliente() {

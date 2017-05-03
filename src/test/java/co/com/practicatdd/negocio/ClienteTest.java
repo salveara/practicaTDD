@@ -2,6 +2,7 @@ package co.com.practicatdd.negocio;
 
 import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.enumerator.Genero;
+import co.com.practicatdd.entidades.enumerator.TipoCliente;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
 
 import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
@@ -25,7 +26,7 @@ public class ClienteTest {
         //Arange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.HOMBRE);
+                "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
         ClienteNegocio negocio = new ClienteNegocio(cliente);
 
         //Act
@@ -40,7 +41,7 @@ public class ClienteTest {
         //Arrange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.HOMBRE);
+                "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
         cliente.setTelefonoCasa("2355412");
         ClienteNegocio negocio = new ClienteNegocio(cliente);
 
@@ -56,7 +57,7 @@ public class ClienteTest {
         //Arrange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.NINGUNO, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.HOMBRE);
+                "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
         ClienteNegocio negocio = new ClienteNegocio(cliente);
 
         //Act
@@ -71,7 +72,7 @@ public class ClienteTest {
         //Arrange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.NIT, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.HOMBRE);
+                "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
         ClienteNegocio negocio = new ClienteNegocio(cliente);
 
         //Act
@@ -86,7 +87,7 @@ public class ClienteTest {
         //Arrange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.OTRO);
+                "albertochanci@gmail.com", Genero.OTRO, TipoCliente.ORO);
         ClienteNegocio negocio = new ClienteNegocio(cliente);
 
         //Act
@@ -115,7 +116,7 @@ public class ClienteTest {
         //Arange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.HOMBRE);
+                "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateInString = "15/10/3000";
         try {
@@ -138,7 +139,7 @@ public class ClienteTest {
         //Arange
         Cliente cliente = new Cliente("Ana", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.MUJER);
+                "albertochanci@gmail.com", Genero.MUJER, TipoCliente.ORO);
         ClienteNegocio negocio = new ClienteNegocio(cliente);
 
         //Act
@@ -154,7 +155,7 @@ public class ClienteTest {
 
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.HOMBRE);
+                "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
         ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
         when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(true);
         ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
@@ -171,7 +172,7 @@ public class ClienteTest {
         //Arange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail", Genero.HOMBRE);
+                "albertochanci@gmail", Genero.HOMBRE, TipoCliente.ORO);
         ClienteNegocio negocio = new ClienteNegocio(cliente);
 
         //Act
@@ -186,7 +187,7 @@ public class ClienteTest {
         //Arrange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
-                "albertochanci@gmail.com", Genero.HOMBRE);
+                "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
         ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
         when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(false);
         when(clienteRepositorio.guardarCliente(cliente)).thenReturn(null);
