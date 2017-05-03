@@ -18,6 +18,7 @@ public class ClienteNegocio {
 
     public ClienteNegocio(Cliente informacionCliente) {
         this.cliente = informacionCliente;
+        this.repositorio = new ClienteRepositorioImpl();
     }
 
     public ClienteNegocio(Cliente informacionCliente, ClienteRepositorio repositorio) {

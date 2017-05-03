@@ -1,5 +1,6 @@
 package co.com.practicatdd.negocio;
 
+import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.Producto;
 import co.com.practicatdd.entidades.Venta;
 import co.com.practicatdd.entidades.VentaProducto;
@@ -10,9 +11,15 @@ import java.util.List;
 public class VentaNegocio {
 
     private Venta venta;
+    private ClienteNegocio clienteNegocio;
 
     VentaNegocio(Venta venta) {
         this.venta = venta;
+    }
+
+    VentaNegocio(Venta venta, ClienteNegocio clienteNegocio) {
+        this.venta = venta;
+        this.clienteNegocio = clienteNegocio;
     }
 
     public boolean validarCamposRequeridos() {
@@ -79,4 +86,14 @@ public class VentaNegocio {
         return venta.getDescuento() >= 0 && venta.getDescuento() <= 1;
     }
 
+    public Venta GuardarVenta(boolean deseaDarInformacion) {
+        if (deseaDarInformacion){
+            clienteNegocio.GuardarCliente();
+            return venta;
+        }
+        Cliente clienteGenerico = new Cliente();
+        clienteGenerico.setNombres("Cliente Generico");
+        venta.setCliente(clienteGenerico);
+        return venta;
+    }
 }

@@ -207,35 +207,47 @@ public class VentaTest {
     //TODO las dos
     @Test
     public void clienteNuevoQueNoDaSuInformacionSeGuardaComoGenerico() {
+        //Arrange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
                 "albertochanci@gmail.com", Genero.HOMBRE);
-        ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
-        when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(false);
-        when(clienteRepositorio.guardarCliente(cliente)).thenReturn(null);
-        ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
+        Date fechaVenta = new Date();
+        Producto producto = new Producto("Arroz", 3500.0);
+        VentaProducto ventaProducto = new VentaProducto(producto, 3);
+        List<VentaProducto> ventaProductos = new ArrayList<VentaProducto>();
+        ventaProductos.add(ventaProducto);
+        Venta venta = new Venta(cliente, ventaProductos);
+        ClienteNegocio clienteNegocio = mock(ClienteNegocio.class);
+        when(clienteNegocio.GuardarCliente()).thenReturn("Ocurrió un error al guardar la información.");
+        VentaNegocio negocio = new VentaNegocio(venta, clienteNegocio);
 
         //Act
-        String respuesta = negocio.GuardarCliente();
+        String respuesta = negocio.GuardarVenta(false).getCliente().getNombres();
 
         //Assert
-        Assert.assertEquals("Cliente almacenado como cliente generico", respuesta);
+        Assert.assertEquals("Cliente Generico", respuesta);
     }
 
     @Test
     public void clienteExisteSeGuardaConEseCliente() {
+        //Arrange
         Cliente cliente = new Cliente("Alberto Chanci", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
                 "albertochanci@gmail.com", Genero.HOMBRE);
-        ClienteRepositorioImpl clienteRepositorio = mock(ClienteRepositorioImpl.class);
-        when(clienteRepositorio.validarUsuarioExistente("999999999")).thenReturn(true);
-        when(clienteRepositorio.guardarCliente(cliente)).thenReturn(cliente);
-        ClienteNegocio negocio = new ClienteNegocio(cliente, clienteRepositorio);
+        Date fechaVenta = new Date();
+        Producto producto = new Producto("Arroz", 3500.0);
+        VentaProducto ventaProducto = new VentaProducto(producto, 3);
+        List<VentaProducto> ventaProductos = new ArrayList<VentaProducto>();
+        ventaProductos.add(ventaProducto);
+        Venta venta = new Venta(cliente, ventaProductos);
+        ClienteNegocio clienteNegocio = mock(ClienteNegocio.class);
+        when(clienteNegocio.GuardarCliente()).thenReturn("El cliente ya existe");
+        VentaNegocio negocio = new VentaNegocio(venta, clienteNegocio);
 
         //Act
-        String respuesta = negocio.GuardarCliente();
+        String respuesta = negocio.GuardarVenta(true).getCliente().getNombres();
 
         //Assert
-        Assert.assertEquals("Cliente almacenado como cliente generico", respuesta);
+        Assert.assertEquals("Alberto Chanci", respuesta);
     }
 }
