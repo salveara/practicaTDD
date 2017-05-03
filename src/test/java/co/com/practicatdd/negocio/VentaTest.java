@@ -55,7 +55,7 @@ public class VentaTest {
         VentaNegocio ventaNegocio = new VentaNegocio(venta);
 
         //Act
-        boolean respuesta = ventaNegocio.validarCantidad(venta.getVentaProductos());
+        boolean respuesta = ventaNegocio.validarCantidad();
 
         //Assert
         Assert.assertFalse(respuesta);

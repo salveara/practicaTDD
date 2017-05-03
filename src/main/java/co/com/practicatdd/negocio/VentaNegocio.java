@@ -4,7 +4,6 @@ import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.Producto;
 import co.com.practicatdd.entidades.Venta;
 import co.com.practicatdd.entidades.VentaProducto;
-import co.com.practicatdd.repositorio.VentaRepositorio;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class VentaNegocio {
     }
 
     public boolean validarCamposRequeridos() {
-        return (validarCamposRequeridosVentaProducto(venta.getVentaProductos()))
+        return (validarCamposRequeridosVentaProducto())
                 && (venta.getCliente() != null)
                 && (venta.getSubtotal() != null)
                 && (venta.getIva() != null)
@@ -31,8 +30,8 @@ public class VentaNegocio {
                 && (venta.getFechaVenta() != null);
     }
 
-    private boolean validarCamposRequeridosVentaProducto(List<VentaProducto> ventaProductos) {
-        for (VentaProducto ventaProducto: ventaProductos) {
+    private boolean validarCamposRequeridosVentaProducto() {
+        for (VentaProducto ventaProducto: venta.getVentaProductos()) {
             boolean campofaltante = validarCamposRequeridosProducto(ventaProducto.getProducto())
                     && (ventaProducto.getCantidad() != null)
                     && (ventaProducto.getTotalVenta() != null);
@@ -52,8 +51,8 @@ public class VentaNegocio {
         return field != null && !"".equals(field);
     }
 
-    public boolean validarCantidad(List<VentaProducto> ventaProductos) {
-        for (VentaProducto ventaProducto: ventaProductos) {
+    public boolean validarCantidad() {
+        for (VentaProducto ventaProducto: venta.getVentaProductos()) {
             boolean cantidadMayorCero = ventaProducto.getCantidad() > 0;
             if (!cantidadMayorCero) {
                 return false;
@@ -65,11 +64,11 @@ public class VentaNegocio {
     public boolean validarTotalesVenta() {
         return (venta.getTotalVenta() > 0
                 && venta.getSubtotal() > 0
-                && validarTotalesVentaProducto(venta.getVentaProductos()));
+                && validarTotalesVentaProducto());
     }
 
-    public boolean validarTotalesVentaProducto(List<VentaProducto> ventaProductos) {
-        for (VentaProducto ventaProducto: ventaProductos) {
+    public boolean validarTotalesVentaProducto() {
+        for (VentaProducto ventaProducto: venta.getVentaProductos()) {
             boolean totalMayorCero = ventaProducto.getTotalVenta() > 0;
             if (!totalMayorCero) {
                 return false;
@@ -86,10 +85,21 @@ public class VentaNegocio {
         return venta.getDescuento() >= 0 && venta.getDescuento() <= 1;
     }
 
+    public boolean validarTodosLosCampos() {
+        return validarCamposRequeridos()
+                && validarCantidad()
+                && validarTotalesVenta()
+                && validarTotalVentaMayorSubtotal()
+                && validarDescuento();
+    }
+
     public Venta GuardarVenta(boolean deseaDarInformacion) {
         if (deseaDarInformacion){
-            clienteNegocio.GuardarCliente();
-            return venta;
+            if (validarTodosLosCampos()) {
+                clienteNegocio.GuardarCliente();
+                return venta;
+            }
+            return null;
         }
         Cliente clienteGenerico = new Cliente();
         clienteGenerico.setNombres("Cliente Generico");

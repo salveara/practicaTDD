@@ -18,6 +18,7 @@ public class Venta {
         this.subtotal = calcularSubtotal();
         this.totalVenta = subtotal * (1 + iva);
         this.fechaVenta = new Date();
+        this.descuento = 0.0;
     }
 
     public Venta(Cliente cliente, List<VentaProducto> ventaProductos, Double descuento) {
