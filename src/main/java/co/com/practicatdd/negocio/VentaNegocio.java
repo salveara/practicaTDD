@@ -11,10 +11,6 @@ public class VentaNegocio {
     private Venta venta;
     private ClienteNegocio clienteNegocio;
 
-    VentaNegocio(Venta venta) {
-        this.venta = venta;
-    }
-
     VentaNegocio(Venta venta, ClienteNegocio clienteNegocio) {
         this.venta = venta;
         this.clienteNegocio = clienteNegocio;
@@ -41,13 +37,10 @@ public class VentaNegocio {
         return true;
     }
 
-    public boolean validarCamposRequeridosProducto(Producto producto) {
-        return (stringIsNotNullOrEmpty(producto.getNombre())
+    private boolean validarCamposRequeridosProducto(Producto producto) {
+        return (producto.getNombre() != null
+                && !"".equals(producto.getNombre())
                 && (producto.getPrecio() != null));
-    }
-
-    private boolean stringIsNotNullOrEmpty(String field) {
-        return field != null && !"".equals(field);
     }
 
     public boolean validarCantidad() {
@@ -66,7 +59,7 @@ public class VentaNegocio {
                 && validarTotalesVentaProducto());
     }
 
-    public boolean validarTotalesVentaProducto() {
+    private boolean validarTotalesVentaProducto() {
         for (VentaProducto ventaProducto: venta.getVentaProductos()) {
             boolean totalMayorCero = ventaProducto.getTotalVenta() > 0;
             if (!totalMayorCero) {
@@ -84,7 +77,7 @@ public class VentaNegocio {
         return venta.getDescuento() >= 0 && venta.getDescuento() <= 1;
     }
 
-    public boolean validarTodosLosCampos() {
+    private boolean validarTodosLosCampos() {
         return validarCamposRequeridos()
                 && validarCantidad()
                 && validarTotalesVenta()

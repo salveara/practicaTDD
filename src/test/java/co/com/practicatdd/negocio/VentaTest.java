@@ -8,6 +8,7 @@ import co.com.practicatdd.entidades.enumerator.Genero;
 import co.com.practicatdd.entidades.enumerator.TipoCliente;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
 
+import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,26 +23,26 @@ import static org.mockito.Mockito.when;
 
 public class VentaTest {
 
-    Cliente cliente;
-    Producto producto;
-    VentaProducto ventaProducto;
-    List<VentaProducto> ventaProductos;
-    Venta venta;
-    VentaNegocio ventaNegocio;
+    private Cliente cliente;
+    private VentaProducto ventaProducto;
+    private List<VentaProducto> ventaProductos;
+    private Venta venta;
+    private VentaNegocio ventaNegocio;
 
     /**
      * Este metodo es el arrange de la mayoria de pruebas  la etiqueta @Before hace que se ejecute antes de cada prueba
      */
     @Before
     public void init() {
-        cliente = new Cliente("Alberto Chanci", "Chanci", TipoDocumento.CEDULA, "999999999",
-                "310000000", "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
-        producto = new Producto("Arroz", 3500.0);
+        cliente = new Cliente("Jhon", "Doe", TipoDocumento.TARJETA_IDENTIDAD, "3111258",
+                "3103125685", "jhon@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
+        Producto producto = new Producto("Arroz", 3500.0);
         ventaProducto = new VentaProducto(producto, 3);
         ventaProductos = new ArrayList<VentaProducto>();
         ventaProductos.add(ventaProducto);
         venta = new Venta(cliente, ventaProductos);
-        ventaNegocio = new VentaNegocio(venta);
+        ClienteNegocio clienteNegocio = new ClienteNegocio(cliente, new ClienteRepositorioImpl());
+        ventaNegocio = new VentaNegocio(venta, clienteNegocio);
     }
 
     @Test
@@ -144,7 +145,7 @@ public class VentaTest {
         //Act
         String respuesta = negocio.GuardarVenta(true).getCliente().getNombres();
         //Assert
-        Assert.assertEquals("Alberto Chanci", respuesta);
+        Assert.assertEquals("Jhon", respuesta);
     }
 
     @Test

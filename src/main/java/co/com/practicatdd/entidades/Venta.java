@@ -45,7 +45,7 @@ public class Venta {
         return subtotal;
     }
 
-    public double calcularDescuento() {
+    private double calcularDescuento() {
         switch (cliente.getTipoCliente()) {
             case ORO: return TipoCliente.ORO.getDescuento();
             case PLATA: return TipoCliente.PLATA.getDescuento();

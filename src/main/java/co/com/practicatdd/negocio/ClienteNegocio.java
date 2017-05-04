@@ -4,7 +4,6 @@ import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.enumerator.Genero;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
 import co.com.practicatdd.repositorio.ClienteRepositorio;
-import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
@@ -16,17 +15,12 @@ public class ClienteNegocio {
     private Cliente cliente;
     private ClienteRepositorio repositorio;
 
-    public ClienteNegocio(Cliente informacionCliente) {
-        this.cliente = informacionCliente;
-        this.repositorio = new ClienteRepositorioImpl();
-    }
-
     public ClienteNegocio(Cliente informacionCliente, ClienteRepositorio repositorio) {
         this.cliente = informacionCliente;
         this.repositorio = repositorio;
     }
 
-    public boolean ValidarCampos() {
+    private boolean ValidarCampos() {
         if (!ValidarCamposRequeridos()) {
             return false;
         }
@@ -45,18 +39,18 @@ public class ClienteNegocio {
     }
 
     public boolean ValidarCamposRequeridos() {
-        return  (!(stringIsNotNullOrEmpty(cliente.getNombres()))
-                && !(stringIsNotNullOrEmpty(cliente.getApellidos()))
-                && !(stringIsNotNullOrEmpty(cliente.getApellidos()))
+        return  ((stringIsNotNullOrEmpty(cliente.getNombres()))
+                && (stringIsNotNullOrEmpty(cliente.getApellidos()))
+                && (stringIsNotNullOrEmpty(cliente.getApellidos()))
                 && cliente.getTipoDocumento() != TipoDocumento.NINGUNO
-                && !(stringIsNotNullOrEmpty(cliente.getNumeroDocumento()))
-                && !(stringIsNotNullOrEmpty(cliente.getTelefonoCelular()))
-                && !(stringIsNotNullOrEmpty(cliente.getCorreoElectronico()))
+                && (stringIsNotNullOrEmpty(cliente.getNumeroDocumento()))
+                && (stringIsNotNullOrEmpty(cliente.getTelefonoCelular()))
+                && (stringIsNotNullOrEmpty(cliente.getCorreoElectronico()))
                 && cliente.getGenero() != Genero.NINGUNO);
     }
 
     private boolean stringIsNotNullOrEmpty(String field) {
-        return field == null || "".equals(field);
+        return !(field == null || "".equals(field));
     }
 
     public String imprimirMensajeCamposRequeridos() {
@@ -90,7 +84,7 @@ public class ClienteNegocio {
         return "Edad: " + calcularEdad();
     }
 
-    public int calcularEdad() {
+    private int calcularEdad() {
         LocalDate now = LocalDate.now();
         LocalDate fechaNacimiento = LocalDate.fromDateFields(cliente.getFechaNacimiento());
         Period period = new Period(fechaNacimiento, now, PeriodType.yearMonthDay());

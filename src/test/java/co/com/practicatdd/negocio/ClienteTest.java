@@ -5,6 +5,7 @@ import co.com.practicatdd.entidades.enumerator.Genero;
 import co.com.practicatdd.entidades.enumerator.TipoCliente;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
 
+import co.com.practicatdd.repositorio.ClienteRepositorio;
 import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,18 +23,20 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ClienteTest {
 
-    Cliente cliente;
-    ClienteNegocio negocio;
+    private Cliente cliente;
+    private ClienteNegocio negocio;
+    private ClienteRepositorio repositorio;
 
     /**
      * Este metodo es el arrange de la mayoria de pruebas  la etiqueta @Before hace que se ejecute antes de cada prueba
      */
     @Before
     public void init() {
-        cliente = new Cliente("Alberto Chanci", "Chanci",
+        cliente = new Cliente("Alberto", "Chanci",
                 TipoDocumento.CEDULA, "999999999", "310000000",
                 "albertochanci@gmail.com", Genero.HOMBRE, TipoCliente.ORO);
-        negocio = new ClienteNegocio(cliente);
+        repositorio = new ClienteRepositorioImpl();
+        negocio = new ClienteNegocio(cliente, repositorio);
     }
 
     @Test
@@ -58,7 +61,7 @@ public class ClienteTest {
     public void ElTipoDeDocumentoNoPuedeSerNiguno(){
         //Arrange
         cliente.setTipoDocumento(TipoDocumento.NINGUNO);
-        ClienteNegocio negocio = new ClienteNegocio(cliente);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, repositorio);
         //Act
         boolean respuesta = negocio.ValidarCamposRequeridos();
         //Assert
@@ -69,7 +72,7 @@ public class ClienteTest {
     public void SiElTipoDeDocumentoEsNitSeDebeSolicitarTelefonoDeLaEmpresa(){
         //Arrange
         cliente.setTipoDocumento(TipoDocumento.NIT);
-        ClienteNegocio negocio = new ClienteNegocio(cliente);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, repositorio);
         //Act
         boolean respuesta = negocio.ValidarTelefonoEmpresa();
         //Assert
@@ -80,7 +83,7 @@ public class ClienteTest {
     public void ElCampoGeneroPuedeSerOtro(){
         //Arrange
         cliente.setGenero(Genero.OTRO);
-        ClienteNegocio negocio = new ClienteNegocio(cliente);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, repositorio);
         //Act
         boolean respuesta = negocio.ValidarCamposRequeridos();
         //Assert
@@ -92,7 +95,7 @@ public class ClienteTest {
         //Arrange
         Cliente cliente = new Cliente();
         cliente.setCorreoElectronico("albertochancigmail.com");
-        ClienteNegocio negocio = new ClienteNegocio(cliente);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, repositorio);
 
         //Act
         boolean resultado = negocio.ValidarFormatoCorreoElectronico();
@@ -122,7 +125,7 @@ public class ClienteTest {
     public void SiClienteEsMujerEdadEsCero() {
         //Arange
         cliente.setGenero(Genero.MUJER);
-        ClienteNegocio negocio = new ClienteNegocio(cliente);
+        ClienteNegocio negocio = new ClienteNegocio(cliente, repositorio);
         //Act
         String respuesta = negocio.EdadCliente();
         //Assert
