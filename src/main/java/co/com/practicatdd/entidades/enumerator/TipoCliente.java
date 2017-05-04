@@ -15,7 +15,7 @@ public enum TipoCliente {
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
                 || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-            return this.descuento + 0.5;
+            return this.descuento + 0.05;
         }
         return descuento;
     }

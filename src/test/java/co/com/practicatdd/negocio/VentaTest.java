@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -108,9 +109,10 @@ public class VentaTest {
         //Arrange
         Venta venta = new Venta(cliente, ventaProductos);
         //Act
-        Date respuesta = venta.getFechaVenta();
+        Date fechaVenta = venta.getFechaVenta();
+        int respuesta = new Date().compareTo(fechaVenta);
         //Assert
-        Assert.assertEquals(new Date(), respuesta);
+        Assert.assertEquals(0, respuesta);
     }
 
     @Test
@@ -146,26 +148,39 @@ public class VentaTest {
     }
 
     @Test
-    public void clienteOroTieneDescuentoDe10PorCiento() {
+    public void clienteOroTieneDescuentoDe10PorCientoEnSemanaO15ElFinDeSemana() {
+        //Arrange
+        double descuento = 0.1;
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+                || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            descuento = 0.15;
+        }
         //Act
         double respuesta = venta.getDescuento();
         //Assert
-        Assert.assertEquals(0.1, respuesta, 0.0);
+        Assert.assertEquals(descuento, respuesta, 0.0);
     }
 
     @Test
-    public void clientePlataTieneDescuentoDe5PorCiento() {
+    public void clientePlataTieneDescuentoDe5PorCientoEnSemanaO10ElFinDeSemana() {
         //Arrange
         cliente.setTipoCliente(TipoCliente.PLATA);
         Venta venta = new Venta(cliente, ventaProductos);
+        double descuento = 0.05;
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+                || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            descuento = 0.1;
+        }
         //Act
         double respuesta = venta.getDescuento();
         //Assert
-        Assert.assertEquals(0.05, respuesta, 0.0);
+        Assert.assertEquals(descuento, respuesta, 0.0);
     }
 
     @Test
-    public void clientePorDefectoTieneDescuentoDeMaximo2PorCiento() {
+    public void clientePorDefectoTieneDescuentoDeMaximo2PorCientoEnSemanaO5ElFinDeSemana() {
         //Arrange
         cliente.setTipoCliente(TipoCliente.DEFECTO);
         Venta venta = new Venta(cliente, ventaProductos, 0.01);

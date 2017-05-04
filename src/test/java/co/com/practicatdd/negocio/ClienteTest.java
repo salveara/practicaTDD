@@ -25,6 +25,9 @@ public class ClienteTest {
     Cliente cliente;
     ClienteNegocio negocio;
 
+    /**
+     * Este metodo es el arrange de la mayoria de pruebas  la etiqueta @Before hace que se ejecute antes de cada prueba
+     */
     @Before
     public void init() {
         cliente = new Cliente("Alberto Chanci", "Chanci",
