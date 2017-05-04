@@ -100,6 +100,7 @@ public class ClienteNegocio {
                 return true;
             }
         }
+        imprimirMensajeCamposRequeridos();
         return false;
     }
 

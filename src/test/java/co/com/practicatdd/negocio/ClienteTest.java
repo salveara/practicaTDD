@@ -7,6 +7,9 @@ import co.com.practicatdd.entidades.enumerator.TipoDocumento;
 
 import co.com.practicatdd.repositorio.ClienteRepositorio;
 import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -130,6 +133,29 @@ public class ClienteTest {
         String respuesta = negocio.EdadCliente();
         //Assert
         Assert.assertEquals("Edad: 0", respuesta);
+    }
+
+    @Test
+    public void SiClienteEsHombreEdadSeDebeImprimir() {
+        try {
+            //Arange
+            cliente.setGenero(Genero.HOMBRE);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date fechaNacimiento = simpleDateFormat.parse("26/04/1994");
+            cliente.setFechaNacimiento(fechaNacimiento);
+            ClienteNegocio negocio = new ClienteNegocio(cliente, repositorio);
+
+            LocalDate now = LocalDate.now();
+            LocalDate fechaEdad = LocalDate.fromDateFields(cliente.getFechaNacimiento());
+            Period PeriodoEdad = new Period(fechaEdad, now, PeriodType.yearMonthDay());
+            int edad =  PeriodoEdad.getYears();
+            //Act
+            String respuesta = negocio.EdadCliente();
+            //Assert
+            Assert.assertEquals("Edad: " + edad, respuesta);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

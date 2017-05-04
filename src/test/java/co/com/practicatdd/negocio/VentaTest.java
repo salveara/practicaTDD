@@ -9,6 +9,8 @@ import co.com.practicatdd.entidades.enumerator.TipoCliente;
 import co.com.practicatdd.entidades.enumerator.TipoDocumento;
 
 import co.com.practicatdd.repositorio.ClienteRepositorioImpl;
+import co.com.practicatdd.repositorio.VentaRepositorio;
+import co.com.practicatdd.repositorio.VentaRepositorioImp;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +44,8 @@ public class VentaTest {
         ventaProductos.add(ventaProducto);
         venta = new Venta(cliente, ventaProductos);
         ClienteNegocio clienteNegocio = new ClienteNegocio(cliente, new ClienteRepositorioImpl());
-        ventaNegocio = new VentaNegocio(venta, clienteNegocio);
+        VentaRepositorio ventaRepositorio = new VentaRepositorioImp();
+        ventaNegocio = new VentaNegocio(venta, ventaRepositorio, clienteNegocio);
     }
 
     @Test
@@ -109,11 +112,11 @@ public class VentaTest {
     public void fechaDeVentaIgualFechaActual() {
         //Arrange
         Venta venta = new Venta(cliente, ventaProductos);
+        long fechaAcutalMillis = new Date().getTime();
         //Act
-        Date fechaVenta = venta.getFechaVenta();
-        int respuesta = new Date().compareTo(fechaVenta);
+        long fechaVentaMillis = venta.getFechaVenta().getTime();
         //Assert
-        Assert.assertEquals(0, respuesta);
+        Assert.assertEquals(fechaAcutalMillis, fechaVentaMillis, 5000L);
     }
 
     @Test
@@ -129,7 +132,9 @@ public class VentaTest {
         //Arrange
         ClienteNegocio clienteNegocio = mock(ClienteNegocio.class);
         when(clienteNegocio.GuardarCliente()).thenReturn("Ocurrió un error al guardar la información.");
-        VentaNegocio negocio = new VentaNegocio(venta, clienteNegocio);
+        VentaRepositorio ventaRepositorio = mock(VentaRepositorio.class);
+        when(ventaRepositorio.guardarVenta(venta)).thenReturn(venta);
+        VentaNegocio negocio = new VentaNegocio(venta, ventaRepositorio, clienteNegocio);
         //Act
         String respuesta = negocio.GuardarVenta(false).getCliente().getNombres();
         //Assert
@@ -141,7 +146,9 @@ public class VentaTest {
         //Arrange
         ClienteNegocio clienteNegocio = mock(ClienteNegocio.class);
         when(clienteNegocio.GuardarCliente()).thenReturn("El cliente ya existe");
-        VentaNegocio negocio = new VentaNegocio(venta, clienteNegocio);
+        VentaRepositorio ventaRepositorio = mock(VentaRepositorio.class);
+        when(ventaRepositorio.guardarVenta(venta)).thenReturn(venta);
+        VentaNegocio negocio = new VentaNegocio(venta, ventaRepositorio, clienteNegocio);
         //Act
         String respuesta = negocio.GuardarVenta(true).getCliente().getNombres();
         //Assert

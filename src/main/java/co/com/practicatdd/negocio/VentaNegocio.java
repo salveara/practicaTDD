@@ -4,15 +4,18 @@ import co.com.practicatdd.entidades.Cliente;
 import co.com.practicatdd.entidades.Producto;
 import co.com.practicatdd.entidades.Venta;
 import co.com.practicatdd.entidades.VentaProducto;
+import co.com.practicatdd.repositorio.VentaRepositorio;
 import co.com.practicatdd.repositorio.VentaRepositorioImp;
 
 public class VentaNegocio {
 
     private Venta venta;
+    private VentaRepositorio repositorio;
     private ClienteNegocio clienteNegocio;
 
-    VentaNegocio(Venta venta, ClienteNegocio clienteNegocio) {
+    VentaNegocio(Venta venta, VentaRepositorio repositorio, ClienteNegocio clienteNegocio) {
         this.venta = venta;
+        this.repositorio = repositorio;
         this.clienteNegocio = clienteNegocio;
     }
 
